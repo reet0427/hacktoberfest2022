@@ -1,0 +1,29 @@
+vector<int> topological_sort(vector<list<int>> adj_list){
+	int v = adj_list.size();
+	vector<int> sorted;
+	vector<int> indegrees(v, 0);
+	queue<int> zero_incoming;
+	
+	for (int node = 0; node < v; node++){
+		list<int>::iterator itr;
+		for (itr = adj_list.begin(); itr != adj_list.end(); itr++){
+			indegrees[*itr]++;
+		}
+	}
+	int visited_nodes = 0;
+	while (!zero_incoming.empty()){
+		int node = zero_incoming.front();
+		zero_incoming.pop();
+		sorted.push_back(node);
+		list<int>::iterator itr;
+		for (itr = adj_list[node].begin(); itr != adj_list[node].end(); itr++){
+			if (--indegrees[*itr] == 0)
+				zero_incoming.push(*itr);
+			visited_nodes++;
+		}
+	}
+	if (visited_nodes != v)
+		throw "Graph contains a cycle";
+	else
+		return sorted;
+}
